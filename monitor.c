@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:28:50 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/10 18:07:07 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:14:59 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,13 @@ static bool	if_all_full(t_table *table)
 	while (i < table->philo_count)
 	{
 		pthread_mutex_lock(&table->philos_arr[i].meal_lock);
-		// printf("Philo %d has eaten %ld meals (needed: %ld)\n", i+1,
-			table->philos_arr[i].count_meal, table->meals_must_eat);
+		// printf("Philo %d has eaten %ld meals (needed: %ld)\n", i+1, table->philos_arr[i].count_meal, table->meals_must_eat);
 		if (table->philos_arr[i].count_meal >= table->meals_must_eat)
 			finished_eating++;
 		pthread_mutex_unlock(&table->philos_arr[i].meal_lock);
 		i++;
 	}
-	// printf("Total philosophers who finished eating: %d/%ld\n",
-		finished_eating, table->philo_count);
+	// printf("Total philosophers who finished eating: %d/%ld\n", finished_eating, table->philo_count);
 	if (finished_eating == table->philo_count)
 	{
 		// printf("*** ALL PHILOSOPHERS HAVE FINISHED EATING ***\n");
@@ -79,7 +77,7 @@ void	*monitor(void *data)
 	t_table	*table;
 
 	table = (t_table *)data;
-	printf("Monitor thread started\n");
+	// printf("Monitor thread started\n");
 	while (1)
 	{
 		pthread_mutex_lock(&table->dead_lock);
