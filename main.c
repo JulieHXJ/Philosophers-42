@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 00:20:39 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/09 17:04:37 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:00:43 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,39 @@ int	check_value(char **av)
 			error_exit("Wrong input: Non digit found!");
 		if (ft_atol(av[i]) < 0)
 			error_exit("Wrong input: Negative number detected!");
-		if (ft_atol(av[i]) == 0 && i != 5)  // Allow 0 only for the 5th argument (meals_must_eat)
+		if (ft_atol(av[i]) == 0 && i != 5)
     		error_exit("Wrong input: Zero is not allowed for this parameter!");
 		if (ft_atol(av[i]) > INT_MAX)
 			error_exit("Wrong input: Value too big!");
+		i++;
+	}
+	return (0);
+}
+
+int	gut_appetit(t_table *table)
+{
+	pthread_t	checker_thread;
+	int			i;
+
+	i = 0;
+	if (table->meals_must_eat == 0)
+		return (0);
+	if (pthread_create(&checker_thread, NULL, &monitor, table) != 0)
+		return (clean_table(table), 1);
+	while (i < table->philo_count)
+	{
+		if (pthread_create(&table->philos_arr[i].thread_id, NULL,
+				&dining_routine, &table->philos_arr[i]) != 0)
+			return (clean_table(table), 1);
+		i++;
+	}
+	if (pthread_join(checker_thread, NULL) != 0)
+		return (clean_table(table), 1);
+	i = 0;
+	while (i < table->philo_count)
+	{
+		if (pthread_join(table->philos_arr[i].thread_id, NULL) != 0)
+			return (clean_table(table), 1);
 		i++;
 	}
 	return (0);
@@ -51,6 +80,7 @@ int	main(int ac, char **av)
 		return (clean_table(&table), 1);
 	if (gut_appetit(&table))
 		return (clean_table(&table), 1);
+	// printf("finished and clean\n");
 	clean_table(&table);
 	return (0);
 }
