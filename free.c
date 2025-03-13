@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junjun <junjun@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 01:01:11 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/08 17:19:01 by junjun           ###   ########.fr       */
+/*   Updated: 2025/03/09 15:22:10 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void error_exit(const char *msg)
+void	error_exit(const char *msg)
 {
-	printf(RED"%s\n"DEFAULT, msg);
+	printf(RED "%s\n" DEFAULT, msg);
 	exit(EXIT_FAILURE);
 }
 
-//Use pthread_mutex_destroy() for each fork and shared mutexes.
-//Free allocated memory for forks_arr and philos_arr.
-void clean_table(t_table *table)
+// Use pthread_mutex_destroy() for each fork and shared mutexes.
+// Free allocated memory for forks_arr and philos_arr.
+void	clean_table(t_table *table)
 {
 	int	i;
 

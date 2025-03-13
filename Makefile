@@ -3,20 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: junjun <junjun@student.42.fr>              +#+  +:+       +#+         #
+#    By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/20 00:28:02 by junjun            #+#    #+#              #
-#    Updated: 2025/03/02 19:25:37 by junjun           ###   ########.fr        #
+#    Updated: 2025/03/11 16:45:16 by xhuang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRCS= main.c 
+SRCS= init.c dining.c monitor.c free.c utils.c main.c 
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -g -pthread
 
 all: $(NAME)
 

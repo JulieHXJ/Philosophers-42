@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junjun <junjun@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 01:32:07 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/08 23:09:58 by junjun           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:53:55 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int init_forks(t_table *table)
+static int	init_forks(t_table *table)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < table->philo_count)
 	{
@@ -26,29 +26,28 @@ static int init_forks(t_table *table)
 	return (0);
 }
 
-static int init_philos(t_table *table)
+static int	init_philos(t_table *table)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < table->philo_count)
 	{
 		table->philos_arr[i].table = table;
 		table->philos_arr[i].philo_id = i + 1;
 		table->philos_arr[i].count_meal = 0;
-		table->philos_arr[i].full = false;
-		table->philos_arr[i].dead = false;
 		table->philos_arr[i].last_eat_time = table->start_time;
 		table->philos_arr[i].left_fork = &table->forks_arr[i];
-		table->philos_arr[i].right_fork = &table->forks_arr[(i + 1) % table->philo_count];
+		table->philos_arr[i].right_fork = &table->forks_arr[(i + 1)
+			% table->philo_count];
 		if (pthread_mutex_init(&table->philos_arr[i].meal_lock, NULL) != 0)
 			error_exit("Meal lock init failed");
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
-int init_table(t_table *table, char **av)
+int	init_table(t_table *table, char **av)
 {
 	table->philo_count = ft_atol(av[1]);
 	table->time_to_die = ft_atol(av[2]);
@@ -58,19 +57,21 @@ int init_table(t_table *table, char **av)
 		table->meals_must_eat = ft_atol(av[5]);
 	else
 		table->meals_must_eat = -1;
-	if (table->time_to_die < 60 || table->time_to_eat < 60 || table->time_to_sleep < 60)
-		error_exit("Wrong input: timestamp less than 60ms!");
+	if (table->philo_count > 200)
+		error_exit("No more than 200 philosophers");
+	if (table->time_to_die < 60 || table->time_to_eat < 60
+		|| table->time_to_sleep < 60)
+		error_exit("Value should be lower than 60 ms");
 	table->end_simul = false;
 	table->start_time = get_current_time();
-	
-	
 	table->philos_arr = malloc(sizeof(t_philo) * table->philo_count);
-	table->forks_arr= malloc(sizeof(pthread_mutex_t) * table->philo_count);
+	table->forks_arr = malloc(sizeof(pthread_mutex_t) * table->philo_count);
 	if (!table->philos_arr || !table->forks_arr)
 		error_exit("Allocation failed");
-	if (pthread_mutex_init(&table->print_lock, NULL) != 0 || pthread_mutex_init(&table->dead_lock, NULL) != 0)
+	if (pthread_mutex_init(&table->print_lock, NULL) != 0
+		|| pthread_mutex_init(&table->dead_lock, NULL) != 0)
 		error_exit("Table lock init failed");
 	if (init_forks(table) != 0 || init_philos(table) != 0)
 		error_exit("Table init failed");
-	return(0);
+	return (0);
 }

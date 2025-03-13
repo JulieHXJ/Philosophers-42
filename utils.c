@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junjun <junjun@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 19:31:55 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/08 17:37:37 by junjun           ###   ########.fr       */
+/*   Updated: 2025/03/13 16:39:12 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ long	ft_atol(const char *str)
 	return (res * sign);
 }
 
-int ft_str_isdigit(const char *str)
+int	ft_str_isdigit(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (!str || !str[0]) // Handle NULL or empty string
+	if (!str || !str[0])
 		return (0);
 	while (str[i])
 	{
@@ -53,35 +53,38 @@ int ft_str_isdigit(const char *str)
 		i++;
 	}
 	return (0);
-	
 }
 
-int	ft_usleep(long ms)
+int	ft_usleep(long millisecond, t_philo *philo)
 {
 	long	start;
-	
+
 	start = get_current_time();
-	while ((get_current_time() - start) < ms)
-		usleep(500);
+	while ((get_current_time() - start) < millisecond)
+	{
+		if (philo && if_end(philo))
+			return (1);
+		usleep(100);
+	}
 	return (0);
 }
 
 long	get_current_time(void)
 {
 	struct timeval	time;
-	
+
 	if (gettimeofday(&time, NULL) == -1)
-		error_exit("Gettimeofday() error");
+		write(2, "gettimeofday() error\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void print_msg(const char *str, t_philo *philo)
+void	print_msg(const char *str, t_philo *philo)
 {
 	long	time;
 
 	pthread_mutex_lock(&philo->table->print_lock);
 	time = get_current_time() - philo->table->start_time;
-	if (!dead_loop(philo))//todo
-		printf(YELLOW"%zu %d %s\n"DEFAULT, time, philo->philo_id, str);
+	if (!if_end(philo))
+		printf(YELLOW "%zu %d %s\n" DEFAULT, time, philo->philo_id, str);
 	pthread_mutex_unlock(&philo->table->print_lock);
 }
