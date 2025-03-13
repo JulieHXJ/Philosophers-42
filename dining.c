@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:49:44 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/10 18:06:38 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:46:43 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static void	thinking(t_philo *philo)
 	if (time_to_think > 600)
 		time_to_think = 200;
 	print_msg("is thinking", philo);
-	philo->full = false;
-	// Add a small random thinking time to break synchronization
 	ft_usleep(time_to_think, philo);
 }
 
@@ -42,12 +40,18 @@ static void	sleeping(t_philo *philo)
 	ft_usleep(philo->table->time_to_sleep, philo);
 }
 
-static bool	take_fork(t_philo *philo, pthread_mutex_t *fork)
+static bool	take_forks(t_philo *philo, pthread_mutex_t *first_fork,
+		pthread_mutex_t *second_fork)
 {
-	pthread_mutex_lock(fork);
+	pthread_mutex_lock(first_fork);
+	if (if_end(philo))
+		return (pthread_mutex_unlock(first_fork), false);
+	print_msg("has taken a fork", philo);
+	pthread_mutex_lock(second_fork);
 	if (if_end(philo))
 	{
-		pthread_mutex_unlock(fork);
+		pthread_mutex_unlock(first_fork);
+		pthread_mutex_unlock(second_fork);
 		return (false);
 	}
 	print_msg("has taken a fork", philo);
@@ -59,36 +63,22 @@ static bool	take_fork(t_philo *philo, pthread_mutex_t *fork)
  */
 static void	eating(t_philo *philo)
 {
+	bool	forks_taken;
+
 	if (if_end(philo))
 		return ;
 	if (philo->philo_id % 2 == 0)
-	{
-		if (!take_fork(philo, philo->left_fork))
-			return ;
-		if (!take_fork(philo, philo->right_fork))
-		{
-			pthread_mutex_unlock(philo->right_fork);
-			return ;
-		}
-	}
+		forks_taken = take_forks(philo, philo->left_fork, philo->right_fork);
 	else
-	{
-		if (!take_fork(philo, philo->right_fork))
-			return ;
-		ft_usleep(1, philo);
-		if (!take_fork(philo, philo->left_fork))
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			return ;
-		}
-	}
+		forks_taken = take_forks(philo, philo->right_fork, philo->left_fork);
+	if (!forks_taken)
+		return ;
 	print_msg("is eating", philo);
 	pthread_mutex_lock(&philo->meal_lock);
-	philo->last_eat_time = get_current_time();
 	philo->count_meal++;
+	philo->last_eat_time = get_current_time();
 	pthread_mutex_unlock(&philo->meal_lock);
 	ft_usleep(philo->table->time_to_eat, philo);
-	philo->full = true;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
@@ -98,19 +88,17 @@ void	*dining_routine(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
+	if (if_end(philo))
+		return (NULL);
 	if (philo->table->philo_count == 1)
 	{
 		pthread_mutex_lock(philo->left_fork);
 		print_msg("has taken a fork", philo);
 		ft_usleep(philo->table->time_to_die, philo);
 		pthread_mutex_lock(&philo->table->dead_lock);
-		philo->dead = true;
 		philo->table->end_simul = true;
 		pthread_mutex_unlock(&philo->table->dead_lock);
-		print_msg("died", philo);
 		pthread_mutex_unlock(philo->left_fork);
-		printf("single philo finished\n");
-		// printf("single in routine finished\n");
 		return (NULL);
 	}
 	if (philo->philo_id % 2 == 0)
@@ -121,5 +109,5 @@ void	*dining_routine(void *data)
 		sleeping(philo);
 		thinking(philo);
 	}
-	return (data);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 00:20:39 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/10 18:00:43 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:56:01 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_value(char **av)
 		if (ft_atol(av[i]) < 0)
 			error_exit("Wrong input: Negative number detected!");
 		if (ft_atol(av[i]) == 0 && i != 5)
-    		error_exit("Wrong input: Zero is not allowed for this parameter!");
+			error_exit("Wrong input: Zero is not allowed for this parameter!");
 		if (ft_atol(av[i]) > INT_MAX)
 			error_exit("Wrong input: Value too big!");
 		i++;
@@ -62,12 +62,6 @@ int	gut_appetit(t_table *table)
 	return (0);
 }
 
-/**
- * command format:
-
-	* ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat](optional)
- *
- */
 int	main(int ac, char **av)
 {
 	t_table	table;
@@ -80,7 +74,7 @@ int	main(int ac, char **av)
 		return (clean_table(&table), 1);
 	if (gut_appetit(&table))
 		return (clean_table(&table), 1);
-	// printf("finished and clean\n");
+	printf("finished and clean\n");
 	clean_table(&table);
 	return (0);
 }

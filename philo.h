@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 00:20:24 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/10 18:07:38 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:56:48 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 # define YELLOW "\033[1;33m"
 # define WHITE "\033[1;37m"
 
-# define USAGE_MSG "Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat](optional)"
+# define USAGE_MSG \
+	"Usage: ./philo number_of_philosophers time_to_die time_to_eat \
+time_to_sleep [number_of_times_each_philosopher_must_eat](optional)"
 
 // structures
 typedef struct s_table	t_table;
@@ -37,8 +39,8 @@ typedef struct s_philo
 	pthread_t			thread_id;
 	int					philo_id;
 	long				count_meal;
-	bool				full;
-	bool				dead;
+	// bool				full;
+	// bool				dead;
 	long				last_eat_time;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;

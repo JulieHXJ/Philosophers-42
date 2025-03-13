@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 01:32:07 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/09 17:14:04 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:53:55 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static int	init_philos(t_table *table)
 		table->philos_arr[i].table = table;
 		table->philos_arr[i].philo_id = i + 1;
 		table->philos_arr[i].count_meal = 0;
-		table->philos_arr[i].full = false;
-		table->philos_arr[i].dead = false;
 		table->philos_arr[i].last_eat_time = table->start_time;
 		table->philos_arr[i].left_fork = &table->forks_arr[i];
 		table->philos_arr[i].right_fork = &table->forks_arr[(i + 1)
@@ -59,6 +57,11 @@ int	init_table(t_table *table, char **av)
 		table->meals_must_eat = ft_atol(av[5]);
 	else
 		table->meals_must_eat = -1;
+	if (table->philo_count > 200)
+		error_exit("No more than 200 philosophers");
+	if (table->time_to_die < 60 || table->time_to_eat < 60
+		|| table->time_to_sleep < 60)
+		error_exit("Value should be lower than 60 ms");
 	table->end_simul = false;
 	table->start_time = get_current_time();
 	table->philos_arr = malloc(sizeof(t_philo) * table->philo_count);

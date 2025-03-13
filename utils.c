@@ -6,7 +6,7 @@
 /*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 19:31:55 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/09 18:28:14 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 16:39:12 by xhuang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_usleep(long millisecond, t_philo *philo)
 	{
 		if (philo && if_end(philo))
 			return (1);
-		usleep(500);
+		usleep(100);
 	}
 	return (0);
 }
@@ -84,6 +84,7 @@ void	print_msg(const char *str, t_philo *philo)
 
 	pthread_mutex_lock(&philo->table->print_lock);
 	time = get_current_time() - philo->table->start_time;
-	printf(YELLOW "%zu %d %s\n" DEFAULT, time, philo->philo_id, str);
+	if (!if_end(philo))
+		printf(YELLOW "%zu %d %s\n" DEFAULT, time, philo->philo_id, str);
 	pthread_mutex_unlock(&philo->table->print_lock);
 }
