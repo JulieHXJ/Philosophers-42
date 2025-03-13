@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: junjun <junjun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 00:20:24 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/13 17:56:48 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 21:44:05 by junjun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ typedef struct s_philo
 	pthread_t			thread_id;
 	int					philo_id;
 	long				count_meal;
-	// bool				full;
-	// bool				dead;
 	long				last_eat_time;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;

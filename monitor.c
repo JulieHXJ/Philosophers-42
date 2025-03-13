@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xhuang <xhuang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: junjun <junjun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:28:50 by junjun            #+#    #+#             */
-/*   Updated: 2025/03/13 17:55:32 by xhuang           ###   ########.fr       */
+/*   Updated: 2025/03/13 21:43:27 by junjun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	*monitor(void *data)
 		if (if_all_full(table))
 			break ;
 	}
-	printf("Monitor thread exiting\n");
 	return (NULL);
 }
 
